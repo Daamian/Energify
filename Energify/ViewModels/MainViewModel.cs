@@ -10,6 +10,7 @@ namespace Energify.ViewModels;
 public partial class MainViewModel : ObservableObject
 {
     private readonly ApplianceStorageService _storageService;
+    private bool _isLoading;
 
     [ObservableProperty]
     private decimal pricePerKwh = 0.65m;
@@ -34,9 +35,9 @@ public partial class MainViewModel : ObservableObject
 
     public ObservableCollection<ApplianceViewModel> Appliances { get; } = new();
 
-    public MainViewModel()
+    public MainViewModel(ApplianceStorageService storageService)
     {
-        _storageService = new ApplianceStorageService();
+        _storageService = storageService;
         LoadData();
     }
 
@@ -100,12 +101,14 @@ public partial class MainViewModel : ObservableObject
 
     partial void OnPricePerKwhChanged(decimal value)
     {
+        if (_isLoading) return;
         RecalculateAll();
         _storageService.SavePricePerKwh(value);
     }
 
     partial void OnCurrencyChanged(string value)
     {
+        if (_isLoading) return;
         RecalculateAll();
         _storageService.SaveCurrency(value);
     }
@@ -143,8 +146,10 @@ public partial class MainViewModel : ObservableObject
 
     private void LoadData()
     {
+        _isLoading = true;
         PricePerKwh = _storageService.LoadPricePerKwh();
         Currency = _storageService.LoadCurrency();
+        _isLoading = false;
         
         var savedAppliances = _storageService.LoadAppliances();
 
@@ -169,24 +174,4 @@ public partial class MainViewModel : ObservableObject
         _storageService.SaveAppliances(appliances);
     }
 
-    private void AddSampleData()
-    {
-        var samples = new List<(string Name, double Power, double Usage)>
-        {
-            ("Czajnik", 2000, 0.5),
-            ("Lodówka", 150, 24),
-            ("Telewizor", 100, 4),
-            ("Komputer", 300, 6)
-        };
-
-        foreach (var (name, power, usage) in samples)
-        {
-            var appliance = new Appliance(name, new Power(power), new Duration(usage));
-            var viewModel = ApplianceViewModel.FromAppliance(appliance);
-            CalculateAndUpdateAppliance(viewModel);
-            Appliances.Add(viewModel);
-        }
-
-        UpdateTotalCost();
-    }
 }

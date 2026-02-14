@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Energify.Services;
+using Energify.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace Energify;
 
@@ -14,6 +16,10 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+
+        builder.Services.AddSingleton<ApplianceStorageService>();
+        builder.Services.AddSingleton<MainViewModel>();
+        builder.Services.AddSingleton<MainPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

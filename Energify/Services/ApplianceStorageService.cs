@@ -32,17 +32,16 @@ public class ApplianceStorageService
 
             if (string.IsNullOrWhiteSpace(json))
             {
-                return new List<Appliance>();
+                return [];
             }
 
             var appliances = JsonSerializer.Deserialize<List<Appliance>>(json);
-            return appliances ?? new List<Appliance>();
+            return appliances ?? [];
         }
         catch (Exception ex)
         {
-            // Log error
             System.Diagnostics.Debug.WriteLine($"Error loading appliances: {ex.Message}");
-            return new List<Appliance>();
+            return [];
         }
     }
 
@@ -50,7 +49,7 @@ public class ApplianceStorageService
     {
         try
         {
-            Preferences.Set(PricePerKwhKey, (double)price);
+            Preferences.Set(PricePerKwhKey, price.ToString(System.Globalization.CultureInfo.InvariantCulture));
         }
         catch (Exception ex)
         {
@@ -62,8 +61,11 @@ public class ApplianceStorageService
     {
         try
         {
-            var price = Preferences.Get(PricePerKwhKey, (double)defaultValue);
-            return (decimal)price;
+            var raw = Preferences.Get(PricePerKwhKey, string.Empty);
+            return decimal.TryParse(raw, System.Globalization.NumberStyles.Any,
+                System.Globalization.CultureInfo.InvariantCulture, out var price)
+                ? price
+                : defaultValue;
         }
         catch (Exception ex)
         {
