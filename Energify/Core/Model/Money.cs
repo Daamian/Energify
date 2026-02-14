@@ -3,7 +3,7 @@ namespace Energify.Core.Model;
 public readonly struct Money(decimal amount, string currency = "USD") : IEquatable<Money>
 {
     public decimal Amount { get; } = amount;
-    public string Currency { get; } = currency;
+    public string Currency { get; } = currency ?? "USD";
 
     public override string ToString() => $"{Amount:F2} {Currency}";
 

@@ -27,9 +27,11 @@ public readonly struct Energy : IEquatable<Energy>
     public static bool operator !=(Energy e1, Energy e2) => !e1.Equals(e2);
     public static Energy operator *(Energy energy, double factor) => new (energy.KiloWattHours * factor);
 
+    private const double Epsilon = 1e-9;
+
     public bool Equals(Energy other)
     {
-        return KiloWattHours == other.KiloWattHours;
+        return Math.Abs(KiloWattHours - other.KiloWattHours) < Epsilon;
     }
 
     public override bool Equals(object? obj)
@@ -39,6 +41,6 @@ public readonly struct Energy : IEquatable<Energy>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(KiloWattHours);
+        return HashCode.Combine(Math.Round(KiloWattHours, 9));
     }
 }

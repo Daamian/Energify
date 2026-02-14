@@ -37,9 +37,11 @@ public readonly struct Duration : IEquatable<Duration>
     public static bool operator ==(Duration d1, Duration d2) => d1.Equals(d2);
     public static bool operator !=(Duration d1, Duration d2) => !d1.Equals(d2);
 
+    private const double Epsilon = 1e-9;
+
     public bool Equals(Duration other)
     {
-        return HoursPerDay == other.HoursPerDay;
+        return Math.Abs(HoursPerDay - other.HoursPerDay) < Epsilon;
     }
 
     public override bool Equals(object? obj)
@@ -49,6 +51,6 @@ public readonly struct Duration : IEquatable<Duration>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(HoursPerDay);
+        return HashCode.Combine(Math.Round(HoursPerDay, 9));
     }
 }

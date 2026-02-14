@@ -26,16 +26,18 @@ public static class CostCalculator
 
     public static (Money TotalMonthly, Appliance MostExpensive, Appliance Cheapest) CalculateMultiple(IEnumerable<Appliance> appliances, Money pricePerKWh)
     {
-        if (!appliances.Any())
+        var applianceList = appliances.ToList();
+
+        if (applianceList.Count == 0)
             throw new ArgumentException("Appliance collection is empty.", nameof(appliances));
 
         Money totalMonthly = new(0, pricePerKWh.Currency);
-        Appliance? mostExpensive = null;
-        Appliance? cheapest = null;
-        Money highestCost = new(0, pricePerKWh.Currency);
-        Money lowestCost = new(decimal.MaxValue, pricePerKWh.Currency);
+        Appliance mostExpensive = applianceList[0];
+        Appliance cheapest = applianceList[0];
+        Money highestCost = Calculate(applianceList[0], pricePerKWh).MonthlyCost;
+        Money lowestCost = highestCost;
 
-        foreach (var appliance in appliances)
+        foreach (var appliance in applianceList)
         {
             var report = Calculate(appliance, pricePerKWh);
             totalMonthly += report.MonthlyCost;
@@ -53,6 +55,6 @@ public static class CostCalculator
             }
         }
 
-        return (totalMonthly, mostExpensive!, cheapest!);
+        return (totalMonthly, mostExpensive, cheapest);
     }
 }

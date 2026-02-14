@@ -22,9 +22,11 @@ public readonly struct Power : IEquatable<Power>
     public override string ToString() => 
         Watts >= 1000 ? $"{KiloWatts:F2} kW" : $"{Watts} W";
 
+    private const double Epsilon = 1e-9;
+
     public bool Equals(Power other)
     {
-        return Watts == other.Watts;
+        return Math.Abs(Watts - other.Watts) < Epsilon;
     }
 
     public override bool Equals(object? obj)
@@ -34,7 +36,7 @@ public readonly struct Power : IEquatable<Power>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Watts);
+        return HashCode.Combine(Math.Round(Watts, 9));
     }
 
     public static Energy operator *(Power power, Duration duration) => new(power.KiloWatts * duration.HoursPerDay);
