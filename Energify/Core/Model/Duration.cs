@@ -1,9 +1,9 @@
-using System.ComponentModel.DataAnnotations;
-using ElectricityCost.Attributes;
-using CustomRange = ElectricityCost.Attributes.RangeAttribute;
 using System.Reflection;
+using System.Text.Json.Serialization;
+using Energify.Core.Attributes;
+using CustomRange = Energify.Core.Attributes.RangeAttribute;
 
-namespace ElectricityCost.Model;
+namespace Energify.Core.Model;
 
 [Unit("h/day", "Hours per day")]
 public readonly struct Duration : IEquatable<Duration>
@@ -12,6 +12,7 @@ public readonly struct Duration : IEquatable<Duration>
     [CustomRange(0, 24)]
     public double HoursPerDay { get; }
 
+    [JsonConstructor]
     public Duration(double hoursPerDay)
     {
         if (hoursPerDay < 0 || hoursPerDay > 24)

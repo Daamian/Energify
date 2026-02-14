@@ -1,6 +1,7 @@
-using ElectricityCost.Attributes;
+using System.Text.Json.Serialization;
+using Energify.Core.Attributes;
 
-namespace ElectricityCost.Model;
+namespace Energify.Core.Model;
 
 [Unit("W", "Watt")]
 public readonly struct Power : IEquatable<Power>
@@ -9,6 +10,7 @@ public readonly struct Power : IEquatable<Power>
 
     public double KiloWatts => Watts / 1000;
 
+    [JsonConstructor]
     public Power(double watts)
     {
         if (watts < 0)

@@ -1,4 +1,4 @@
-namespace ElectricityCost.Model;
+namespace Energify.Core.Model;
 
 public readonly struct Money(decimal amount, string currency = "USD") : IEquatable<Money>
 {

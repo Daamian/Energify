@@ -1,6 +1,6 @@
-using ElectricityCost.Model;
+using Energify.Core.Model;
 
-namespace ElectricityCost.Service;
+namespace Energify.Core.Service;
 
 public static class CostCalculator
 {

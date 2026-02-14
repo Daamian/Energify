@@ -1,4 +1,4 @@
-namespace ElectricityCost.Service;
+namespace Energify.Core.Service;
 
 static class UnitInfoProvider
 {

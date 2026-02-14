@@ -1,5 +1,5 @@
 using System.Text.Json;
-using ElectricityCost.Model;
+using Energify.Core.Model;
 
 namespace Energify.Services;
 

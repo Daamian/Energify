@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ElectricityCost.Model;
-using ElectricityCost.Service;
+using Energify.Core.Model;
+using Energify.Core.Service;
 using Energify.Services;
 
 namespace Energify.ViewModels;

@@ -1,6 +1,6 @@
-using ElectricityCost.Attributes;
+using Energify.Core.Attributes;
 
-namespace ElectricityCost.Model;
+namespace Energify.Core.Model;
 
 [Unit("kWh", "Kilowatt-hour")]
 public readonly struct Energy : IEquatable<Energy>

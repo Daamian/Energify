@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using ElectricityCost.Model;
+using Energify.Core.Model;
 
 namespace Energify.ViewModels;
 

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ElectricityCost.Attributes;
+namespace Energify.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 public class RangeAttribute(double minValue, double maxValue) : ValidationAttribute

@@ -1,4 +1,4 @@
-namespace ElectricityCost.Attributes;
+namespace Energify.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Struct)]
 public class UnitAttribute(string symbol, string fullName) : Attribute
