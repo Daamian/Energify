@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Energify.ViewModels"
+             x:Class="Energify.MainPage"
+             x:DataType="viewmodels:MainViewModel"
+             BackgroundColor="{StaticResource Gray100}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Header -->
+            <Label
+                Text="⚡ Energify"
+                FontSize="32"
+                FontAttributes="Bold"
+                TextColor="{StaticResource Primary}"
+                HorizontalOptions="Center"
+                Margin="0,10,0,20"/>
+
+            <!-- Sekcja: Cena za kWh -->
+            <Border
+                BackgroundColor="{StaticResource White}"
+                Stroke="{StaticResource Gray200}"
+                StrokeThickness="1"
+                Padding="20"
+                StrokeShape="RoundRectangle 12">
+
+                <VerticalStackLayout Spacing="15">
+                    <Label
+                        Text="Cena za energię"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource Gray900}"/>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Entry
+                            Grid.Column="0"
+                            Text="{Binding PricePerKwh}"
+                            Placeholder="0.65"
+                            Keyboard="Numeric"
+                            FontSize="16"
+                            BackgroundColor="{StaticResource Gray100}"/>
+
+                        <Label
+                            Grid.Column="1"
+                            Text="PLN/kWh"
+                            FontSize="16"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Gray600}"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Sekcja: Dodaj urządzenie -->
+            <Border
+                BackgroundColor="{StaticResource White}"
+                Stroke="{StaticResource Gray200}"
+                StrokeThickness="1"
+                Padding="20"
+                StrokeShape="RoundRectangle 12">
+
+                <VerticalStackLayout Spacing="15">
+                    <Label
+                        Text="Dodaj urządzenie"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource Gray900}"/>
+
+                    <Entry
+                        Text="{Binding NewApplianceName}"
+                        Placeholder="Nazwa urządzenia (np. Czajnik)"
+                        FontSize="16"
+                        BackgroundColor="{StaticResource Gray100}"/>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Entry
+                            Grid.Column="0"
+                            Text="{Binding NewAppliancePower}"
+                            Placeholder="Moc"
+                            Keyboard="Numeric"
+                            FontSize="16"
+                            BackgroundColor="{StaticResource Gray100}"/>
+
+                        <Label
+                            Grid.Column="1"
+                            Text="W (Waty)"
+                            FontSize="14"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Gray600}"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Entry
+                            Grid.Column="0"
+                            Text="{Binding NewApplianceUsage}"
+                            Placeholder="Czas użytkowania"
+                            Keyboard="Numeric"
+                            FontSize="16"
+                            BackgroundColor="{StaticResource Gray100}"/>
+
+                        <Label
+                            Grid.Column="1"
+                            Text="h/dzień"
+                            FontSize="14"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Gray600}"/>
+                    </Grid>
+
+                    <Button
+                        Text="Dodaj urządzenie"
+                        Command="{Binding AddApplianceCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="{StaticResource White}"
+                        FontAttributes="Bold"
+                        CornerRadius="8"
+                        HeightRequest="50"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Sekcja: Lista urządzeń -->
+            <Border
+                BackgroundColor="{StaticResource White}"
+                Stroke="{StaticResource Gray200}"
+                StrokeThickness="1"
+                Padding="20"
+                StrokeShape="RoundRectangle 12"
+                IsVisible="{Binding HasAppliances}">
+
+                <VerticalStackLayout Spacing="15">
+                    <Label
+                        Text="Twoje urządzenia"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource Gray900}"/>
+
+                    <VerticalStackLayout
+                        BindableLayout.ItemsSource="{Binding Appliances}"
+                        Spacing="10">
+
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:ApplianceViewModel">
+                                <Border
+                                    BackgroundColor="{StaticResource Gray100}"
+                                    Stroke="{StaticResource Gray200}"
+                                    StrokeThickness="1"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="8">
+
+                                        <!-- Nazwa i przycisk usuń -->
+                                        <Label
+                                            Grid.Row="0" Grid.Column="0"
+                                            Text="{Binding Name}"
+                                            FontSize="16"
+                                            FontAttributes="Bold"
+                                            TextColor="{StaticResource Gray900}"/>
+
+                                        <Button
+                                            Grid.Row="0" Grid.Column="1"
+                                            Text="✕"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainViewModel}}, Path=RemoveApplianceCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="{StaticResource Gray300}"
+                                            TextColor="{StaticResource Gray900}"
+                                            WidthRequest="35"
+                                            HeightRequest="35"
+                                            CornerRadius="17"
+                                            Padding="0"
+                                            FontSize="18"/>
+
+                                        <!-- Parametry -->
+                                        <HorizontalStackLayout
+                                            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                            Spacing="15">
+                                            <Label
+                                                Text="{Binding PowerWatts, StringFormat='⚡ {0:F0} W'}"
+                                                FontSize="13"
+                                                TextColor="{StaticResource Gray600}"/>
+                                            <Label
+                                                Text="{Binding DailyUsageHours, StringFormat='⏱ {0:F1} h/dzień'}"
+                                                FontSize="13"
+                                                TextColor="{StaticResource Gray600}"/>
+                                        </HorizontalStackLayout>
+
+                                        <!-- Separator -->
+                                        <BoxView
+                                            Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                            HeightRequest="1"
+                                            Color="{StaticResource Gray200}"
+                                            Margin="0,5"/>
+
+                                        <!-- Koszty -->
+                                        <Grid
+                                            Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                            ColumnDefinitions="*,*,*"
+                                            ColumnSpacing="10">
+
+                                            <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                                <Label
+                                                    Text="Dzienny"
+                                                    FontSize="11"
+                                                    TextColor="{StaticResource Gray500}"/>
+                                                <Label
+                                                    Text="{Binding DailyCost}"
+                                                    FontSize="13"
+                                                    FontAttributes="Bold"
+                                                    TextColor="{StaticResource Primary}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                                <Label
+                                                    Text="Miesięczny"
+                                                    FontSize="11"
+                                                    TextColor="{StaticResource Gray500}"/>
+                                                <Label
+                                                    Text="{Binding MonthlyCost}"
+                                                    FontSize="13"
+                                                    FontAttributes="Bold"
+                                                    TextColor="{StaticResource Primary}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="2" Spacing="3">
+                                                <Label
+                                                    Text="Roczny"
+                                                    FontSize="11"
+                                                    TextColor="{StaticResource Gray500}"/>
+                                                <Label
+                                                    Text="{Binding YearlyCost}"
+                                                    FontSize="13"
+                                                    FontAttributes="Bold"
+                                                    TextColor="{StaticResource Primary}"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Sekcja: Całkowity koszt miesięczny -->
+            <Border
+                BackgroundColor="{StaticResource Primary}"
+                Padding="20"
+                StrokeShape="RoundRectangle 12"
+                IsVisible="{Binding HasAppliances}">
+
+                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                    <Label
+                        Text="Całkowity koszt miesięczny"
+                        FontSize="14"
+                        TextColor="{StaticResource White}"
+                        HorizontalOptions="Center"
+                        Opacity="0.9"/>
+
+                    <Label
+                        Text="{Binding TotalMonthlyCost}"
+                        FontSize="32"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource White}"
+                        HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Pusty stan -->
+            <Border
+                BackgroundColor="{StaticResource White}"
+                Stroke="{StaticResource Gray200}"
+                StrokeThickness="1"
+                Padding="40"
+                StrokeShape="RoundRectangle 12"
+                IsVisible="{Binding HasAppliances, Converter={StaticResource InvertedBoolConverter}}">
+
+                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label
+                        Text="📱"
+                        FontSize="48"
+                        HorizontalOptions="Center"/>
+
+                    <Label
+                        Text="Brak urządzeń"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource Gray900}"
+                        HorizontalOptions="Center"/>
+
+                    <Label
+                        Text="Dodaj swoje pierwsze urządzenie powyżej"
+                        FontSize="14"
+                        TextColor="{StaticResource Gray600}"
+                        HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
